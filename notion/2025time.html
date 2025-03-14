@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f7f7f7;
+        }
+
+        .countdown {
+            display: flex;
+            align-items: baseline;
+            gap: clamp(10px, 2vw, 16px);
+            background: linear-gradient(to left, #9fa6b2 100px, #ffffff 100%);
+            padding: clamp(15px, 3vw, 25px) clamp(20px, 5vw, 35px);
+            width: 100vw;
+            height: 100vh;
+            border: 2px solid #ffffff;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .countdown::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: calc(100% - 100px);
+            background: #9fa6b2;
+            z-index: -1;
+        }
+
+        #text {
+            font-size: clamp(18px, 3.5vw, 24px);
+            color: #333;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        #number {
+            font-size: clamp(32px, 6vw, 48px);
+            color: #000;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        #unit {
+            font-size: clamp(18px, 3.5vw, 24px);
+            color: #666;
+            font-weight: 400;
+        }
+
+        @media (max-width: 400px) {
+            .countdown {
+                background: linear-gradient(to left, #9fa6b2 80px, #ffffff 100%);
+            }
+            .countdown::after {
+                left: calc(100% - 80px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <span id="text">2025 剩余</span>
+        <span id="number"></span>
+        <span id="unit">天</span>
+    </div>
+
+    <script>
+        const targetDate = new Date(2025, 11, 31, 23, 59, 59);
+
+        function getDaysUntilTarget() {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const targetStart = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+            const diff = targetStart - todayStart;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            return days >= 0 ? days : 0;
+        }
+
+        function updateCountdown() {
+            document.getElementById('number').textContent = getDaysUntilTarget();
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000 * 60 * 60);
+    </script>
+</body>
+</html>
